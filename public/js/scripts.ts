@@ -46,7 +46,7 @@ function renderMessage(message: Message): HTMLDivElement {
 }
 
 // Get prior messages upon page load
-function refreshMessages(entryAnimation = false) {
+function refreshMessages(entryAnimation = false, scrollToBottom = false) {
 	fetch('/messages')
 		.then(response => response.json())
 		.then(json => {
@@ -59,10 +59,13 @@ function refreshMessages(entryAnimation = false) {
 
 				messagesElement.appendChild(newElement);
 			}
+
+			if (scrollToBottom)
+				(<HTMLElement>document.getElementById('messages-section')).scrollTop = messagesElement.scrollHeight;
 		});
 }
 
-refreshMessages(true);
+refreshMessages(true, true);
 
 // Handle sending a new message
 const submit = function (e: Event) {
@@ -111,4 +114,4 @@ window.addEventListener('resize', ev => {
 	setChatHeight();
 });
 
-window.addEventListener('focus', () => refreshMessages())
+window.addEventListener('focus', () => refreshMessages());

@@ -33,7 +33,7 @@ function renderMessage(message) {
     return rootDiv;
 }
 // Get prior messages upon page load
-function refreshMessages(entryAnimation = false) {
+function refreshMessages(entryAnimation = false, scrollToBottom = false) {
     fetch('/messages')
         .then(response => response.json())
         .then(json => {
@@ -44,9 +44,11 @@ function refreshMessages(entryAnimation = false) {
                 newElement.style.animation = 'none 0';
             messagesElement.appendChild(newElement);
         }
+        if (scrollToBottom)
+            document.getElementById('messages-section').scrollTop = messagesElement.scrollHeight;
     });
 }
-refreshMessages(true);
+refreshMessages(true, true);
 // Handle sending a new message
 const submit = function (e) {
     // prevent default form action from being carried out
